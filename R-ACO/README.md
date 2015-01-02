@@ -7,4 +7,4 @@ To run the version on a cluster of Erlang nodes, please update the files `run.sh
 
 For more details please refer to `description\description.pdf`.
 
-[`Chaos Monkey`](https://github.com/dLuna/chaos_monkey)
+Find more about [`Chaos Monkey`](https://github.com/dLuna/chaos_monkey)

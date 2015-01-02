@@ -12,4 +12,4 @@ There are four versions of distributed Erlang ACO available as follow:
 
 For more details please refer to `description\description.pdf`.
 
-[`Chaos Monkey`](https://github.com/dLuna/chaos_monkey)
+Find more about [`Chaos Monkey`](https://github.com/dLuna/chaos_monkey)
