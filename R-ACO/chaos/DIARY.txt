@@ -1,0 +1,278 @@
+20:00
+
+It starts!  Yay!
+
+20:06
+
+First commit.  Skeleton files, but whatever.
+
+20:20
+
+essen at Freenode recommended cowboy_examples as a quick to get up and
+running Erlang program.  It rocks!  clone, make, ./start.sh and it's
+up.  Now I have something to kill...
+
+20:23
+
+Stupid computer!  It rebooted from having a USB camera connected to
+its USB port.  Happens every now and then.
+
+Oh, well.  I'll head for Subway and get some food.
+
+20:35
+
+Sub acquired.
+
+21:03
+
+Program works.  I can go home.  :-)
+
+Now let's make it a little bit more sophisticated.
+
+22:00
+
+It is fairly sophisticated at killing stuff.  The chaos monkey ignores
+system processes, and will not do suicide.  Everything else is fair
+bait.
+
+Unfortunately it shouldn't really be allowed to kill supervisors,
+because that breaks one of the Rules of Erlang.  Let's see if I can
+identify those.
+
+22:12
+
+Well that was ten minutes of making my printouts nicer looking.  Hmm.
+
+22:13
+
+So, dear diary.  I never told you what the program is supposed to do.
+Well it's a process killer.  I walks around in your system killing
+random processes.  Just to see if you will recover.  What doesn't kill
+you makes you stronger and all that.  Well, except in this case it's
+"what kills you makes you stronger".  So now you know.
+
+22:07
+
+Support has been added for not killing supervisors.  Yay!
+
+And I rewrote the whole printout thing.
+
+I have no idea how to avoid killing the Erlang shell.
+
+00:05
+
+Speed of development has slowed down.
+
+lists:filter(fun({P, App, S}) -> App =:= undefined end, [{P, application:get_application(P), pman_process:is_system_process(P)} || P <- erlang:processes()]).
+
+00:30
+
+Freenode #spawnfest rocks.  Once again very useful.  I did not know
+about sys:get_status(whereis(chaos_monkey_sup)). before this.  Super.
+
+I got tricked since I was so certain that supervisor was *not* a
+gen_server.  Which it is of course.  Even though it shouldn't for so
+many reasons.
+
+00:50
+
+I think I don't add usable code any more.  Going home to sleep, and
+think a bit about the design.
+
+10:30
+
+I'm back!
+
+The code is sort of doing what it should.  There is a huge lot of
+improvements that can be made.  I think it's time to write some
+documentation to see
+
+11:13
+
+Still writing documentation about a future dream scenario.  Time to
+accept that it won't ever be perfect, and just go back to coding some
+of those cool features that have just been described.
+
+11:34
+
+Ok. So *now* the documentation is done.  Let's implement it.
+
+Without adding a lot of features!  Stay away from those.  They are bad
+for you.
+
+12:34
+
+Sweet.  find_orphans/0 seems to work.
+
+16:20
+
+I forgot all about writing here.
+
+chaos_monkey:on/0 and off/0 work as announced.  This is awesome I
+think.  If I have time I will add configuration options and stuff.
+For the time being it works great with some reasonable defaults.  It
+kills a process every five seconds on average.  Should be good enough
+to run in most production systems.
+
+I've started looking at havoc/0,1,2 which is more of a single shot
+thing.  Aim everything at an application and see how it recovers.
+Going slowly, but in the right direction.
+
+Anderson Silva is fighting tonight, so there will be a fight break
+later today.  Hope I can finish a simple version of havoc until then.
+
+16:26
+
+I seriously need a way to identify the shell processes.  What I have
+found so far is that there are two of them.  One which is the actual
+shell, and the other which keeps track of the history.  They don't
+belong to any application.
+
+It is possible to start multiple shells in the same shell session, but
+there are still only two shell processes which are not flagged as
+system processes.
+
+17:03
+
+Ok, so I know why the shell is so elusive.  When running
+pman_process:is_system_process in the shell, it is not a system
+process.  When running the same function from somewhere else, it is.
+Gaah.
+
+Anyway, it seems like the answer is inside shell.erl itself.  I can us
+group:interfaces/1 to find the shell.
+
+17:27
+
+YAY!  Freaking rocks.
+
+So the stupid shell process which is a system process when kindly
+standing around waiting for something to run and then stops being a
+system process as soon as it's doing something, has now been
+discovered.
+
+I now have a way of finding out whether a Pid refers to a shell or
+not.  Let's hope that it stands up in real life.  I think so.  See
+chaos_monkey:is_shell/1 for details.
+
+17:30
+
+Let's have a small break.
+
+17:49
+
+Break over.
+
+18:25
+
+Lots of cleanup of code and documentation.  Time to focus on having
+some sort of version of havoc ready before going to bed.
+
+20:04
+
+Leaving to watch the UFC fight.  The Chaos Monkey can wreck som very
+minor havoc.  More will have to wait until later.
+
+00:50
+
+Anderson Silva kept his belt.  And I got to eat spare ribs.  Everyone
+is happy.
+
+01:13
+
+The good thing with working alone is that when a commit doesn't
+compile, nobody complains.  Took me 25 lines and five minutes to have
+it compiling again.  I hope it works too...
+
+01:45
+
+Major code improvements.  Not really moving closer to the goal, but
+the code *looks* much nicer.
+
+02:45
+
+I think I'll introduce more bugs than I fix by now.  Time to sleep.
+See you all tomorrow.
+
+I'll write some placeholder documentation for later.
+
+12:28
+
+I'm back!  And only seven and a half hours to go.  Yikes!  So maybe I
+didn't go straight to bed when I wrote the above text.  :-)
+
+14:09
+
+Apparently I'm leading the commit-race, and have more than 10% of the
+total commits in the whole of Spawnfest.  I think that by lines of
+code I'm down by the bottom, and by functionality I'm probably around
+whatever.
+
+14:21
+
+Now I have all the information I need to do the rest of what I have
+planned.  How come I can't even build a stupid tree!
+
+15:40
+
+There is a tree structure.  Ugly, but hopefully works well enough for
+my purposes.  I could possibly have used digraph for this, but
+whatever.  Next time.
+
+15:44
+
+INSTALL written.  Should explain things well enough I hope.
+
+16:15
+
+Yikes.  3 hours and change to go.  And orphans get killed by the
+monkey.  The main issue is still a bit away.
+
+17:07
+
+Print a count of max number of processes at which point the tree would
+die.
+
+17:20
+
+Better to keep the TODO list in a TODO file. 
+
+17:44
+
+Killing 23 processes in cowboy.  My system tells me everything goes
+down at 23, but that it probably survives 22.  Why doesn't this
+happen?
+
+17:57
+
+Issue explained.  It had to do with the restart strategy of the app.
+FIXED!
+
+And with zero lines of code (ok, so maybe ten lines of debug printout,
+but who's counting).
+
+18:08
+
+I'm done!
+
+Major cleanup coming up.
+
+18:43
+
+It feels like I'm done now.
+
+Now I just have to wait for that box of Malbec wine to show up.  :-)
+
+19:16
+
+Less than an hour to go.  Just added more options for on/1, so that
+the user can pick which applications to harass.
+
+I'm not sure I dare adding more features.  It would be silly to have a
+broken application in there when the bell rings.
+
+144 commits, 510 lines of chaos_monkey (excluding _app, _sup, and
+app.src), 98 lines of README, 47 lines of INSTALL, and 279 lines of
+diary.  Lots of features.  Heaps of fun.
+
+All in all, two good days of awesome.

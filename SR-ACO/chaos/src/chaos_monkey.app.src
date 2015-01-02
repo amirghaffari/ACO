@@ -1,0 +1,23 @@
+%% -*- Erlang -*-
+{application, chaos_monkey,
+ [
+  {description, "A Monkey that Spreads Chaos"},
+  {vsn, git},
+  {modules,
+   [chaos_monkey]},
+  {registered, [chaos_monkey]},
+  {applications,
+   [kernel,
+    stdlib
+    %pman
+    ]},
+  {mod, {chaos_monkey_app, []}},
+  {env, [
+
+{auto_start, false},
+{ms, 1},
+{apps, all_but_otp}
+
+  ]}
+ ]
+}.
