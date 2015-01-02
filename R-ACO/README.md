@@ -4,3 +4,5 @@ Reliable ACO (R-ACO)
 To run the version on a cluster of Erlang nodes, please update the files `run.sh` and `experiment.sh` based on your cluster specification.
 
 For more details please refer to `description\description.pdf`.
+
+[`Chaos Monkey`](https://github.com/dLuna/chaos_monkey)
